@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.phonegap.plugins.twitter"
+    version="0.3.2">
+
+    <name>Twitter Connect</name>
+    <description>This is Etienne Adriaenssen's verison the plugin for Twitter in Apache Cordova/PhoneGap!</description>
+    <license>MIT</license>
+
+    <js-module src="www/TwitterPlugin.js" name="TwitterPlugin">
+        <clobbers target="Twitter" />
+    </js-module>
+
+    <!-- ios -->
+    <platform name="ios">
+
+
+    <config-file target="config.xml" parent="/widget/plugins">
+        <feature name="TwitterPlugin">
+            <param name="ios-package" value="TwitterPlugin" />
+        </feature>
+    </config-file>
+
+    <header-file src="src/ios/TwitterPlugin.h" />
+    <source-file src="src/ios/TwitterPlugin.m" />
+
+    <framework src="Twitter.framework" />
+    <framework src="Accounts.framework" weak="true" />
+
+</platform>
+</plugin>
