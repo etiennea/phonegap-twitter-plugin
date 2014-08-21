@@ -26,6 +26,8 @@
 
 - (void) getTwitterUsername:(CDVInvokedUrlCommand*)command;
 
+- (void) getTwitterProfile:(CDVInvokedUrlCommand*)command;
+
 - (void) getMentions:(CDVInvokedUrlCommand*)command;
 
 - (void) getTWRequest:(CDVInvokedUrlCommand*)command;

@@ -102,6 +102,18 @@ Twitter.prototype.getTwitterUsername = function(success, failure) {
     cordova.exec(success, failure, "TwitterPlugin", "getTwitterUsername", []);
 };
 /**
+ * Gets user Twitter Profile
+ * @param {Function} success callback
+ * @param {Object[]} success.result Tweet Profile, see [Twitter Doc]
+ * @param {Function} failure callback
+ * @param {String} failure.error reason for failure
+ * 
+ * [Twitter Mentions Doc]: https://dev.twitter.com/docs/api/1.1/get/users/show
+ */
+Twitter.prototype.getTwitterProfile = function(success, failure) {
+    cordova.exec(success, failure, "TwitterPlugin", "getTwitterProfile", []);
+};
+/**
  * Gets Tweets from Twitter Mentions API
  * @param {String} url of [Twitter API Endpoint]
  * @param {Object} params key-value map, matching [Twitter API Endpoint]
