@@ -147,6 +147,53 @@
 
 }
 
+- (void) getTwitterProfile:(CDVInvokedUrlCommand*)command {
+    NSString *callbackId = command.callbackId;
+    NSString *url = [NSString stringWithFormat:@"%@users/show.json", TWITTER_URL];
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    [accountStore requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error) {
+        if(granted) {
+            NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
+            ACAccount *twitterAccount = [accountsArray objectAtIndex:0];
+            NSString *username = twitterAccount.username;
+            
+            NSMutableDictionary *md = [NSMutableDictionary dictionary];
+            md[@"screen_name"] = username;
+            
+            TWRequest *postRequest = [[TWRequest alloc] initWithURL:[NSURL URLWithString:url] parameters:md requestMethod:TWRequestMethodGET];
+            [postRequest setAccount:[accountsArray objectAtIndex:0]];
+            [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                NSString *jsResponse;
+                NSString *dataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                
+                if([urlResponse statusCode] == 200) {
+                    NSDictionary *dict = [dataString JSONObject];
+                    jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict] toSuccessCallbackString:callbackId];
+                }else{
+                    if (![username isEqualToString:@""]){
+                        jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                        messageAsString:username]
+                                      toSuccessCallbackString:callbackId];
+                    }else{
+                        jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                        messageAsString:[NSString stringWithFormat:@"HTTP Error: %li", (long)[urlResponse statusCode]]]
+                                      toErrorCallbackString:callbackId];
+                    }
+                }
+                
+                [self performCallbackOnMainThreadforJS:jsResponse];
+            }];
+        }else{
+            [self performCallbackOnMainThreadforJS:[[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                                      messageAsString:@"Username not found."]
+                                                    toErrorCallbackString:callbackId]];
+        }
+    }];
+}
+
 - (void) getMentions:(CDVInvokedUrlCommand*)command {
     NSString *callbackId = command.callbackId;
     NSString *url = [NSString stringWithFormat:@"%@statuses/mentions.json", TWITTER_URL];
