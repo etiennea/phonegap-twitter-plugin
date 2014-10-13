@@ -157,38 +157,44 @@
     [accountStore requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error) {
         if(granted) {
             NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
-            ACAccount *twitterAccount = [accountsArray objectAtIndex:0];
-            NSString *username = twitterAccount.username;
-            
-            NSMutableDictionary *md = [NSMutableDictionary dictionary];
-            md[@"screen_name"] = username;
-            
-            TWRequest *postRequest = [[TWRequest alloc] initWithURL:[NSURL URLWithString:url] parameters:md requestMethod:TWRequestMethodGET];
-            [postRequest setAccount:[accountsArray objectAtIndex:0]];
-            [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-                NSString *jsResponse;
-                NSString *dataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            if ([accountsArray count]>0){
+                ACAccount *twitterAccount = [accountsArray objectAtIndex:0];
+                NSString *username = twitterAccount.username;
                 
-                if([urlResponse statusCode] == 200) {
-                    NSDictionary *dict = [dataString JSONObject];
-                    jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict] toSuccessCallbackString:callbackId];
-                }else{
-                    if (![username isEqualToString:@""]){
-                        jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                        messageAsString:username]
-                                      toSuccessCallbackString:callbackId];
+                NSMutableDictionary *md = [NSMutableDictionary dictionary];
+                md[@"screen_name"] = username;
+                
+                TWRequest *postRequest = [[TWRequest alloc] initWithURL:[NSURL URLWithString:url] parameters:md requestMethod:TWRequestMethodGET];
+                [postRequest setAccount:[accountsArray objectAtIndex:0]];
+                [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                    NSString *jsResponse;
+                    NSString *dataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                    
+                    if([urlResponse statusCode] == 200) {
+                        NSDictionary *dict = [dataString JSONObject];
+                        jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict] toSuccessCallbackString:callbackId];
                     }else{
-                        jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                        messageAsString:[NSString stringWithFormat:@"HTTP Error: %li", (long)[urlResponse statusCode]]]
-                                      toErrorCallbackString:callbackId];
+                        if (![username isEqualToString:@""]){
+                            jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                            messageAsString:username]
+                                          toSuccessCallbackString:callbackId];
+                        }else{
+                            jsResponse = [[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                            messageAsString:[NSString stringWithFormat:@"HTTP Error: %li", (long)[urlResponse statusCode]]]
+                                          toErrorCallbackString:callbackId];
+                        }
                     }
-                }
-                
-                [self performCallbackOnMainThreadforJS:jsResponse];
-            }];
+                    
+                    [self performCallbackOnMainThreadforJS:jsResponse];
+                }];
+            }else{
+                [self performCallbackOnMainThreadforJS:[[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                                          messageAsString:@"No twitter account set up.Add a new account going to Settings -> Twitter"]
+                                                        toErrorCallbackString:callbackId]];
+            }
         }else{
             [self performCallbackOnMainThreadforJS:[[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                                      messageAsString:@"Username not found."]
+                                                                      messageAsString:[NSString stringWithFormat:@"Please allow %@ to access your twitter account. Go to Settings -> Twitter -> Enable %@.",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]]]
                                                     toErrorCallbackString:callbackId]];
         }
     }];
