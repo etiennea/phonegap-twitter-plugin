@@ -54,6 +54,11 @@ Twitter.prototype.composeTweet = function(success, failure, tweetText, options){
     cordova.exec(success, failure, "TwitterPlugin", "composeTweet", [options]);
 };
 
+Twitter.prototype.sendTweet = function(success,failure,tweetText,options){
+    options = options || {};
+    options.text = tweetText;
+    cordova.exec(success, failure, "TwitterPlugin", "sendTweet", [options]);
+};
 /**
  * Gets Tweets from Twitter Timeline
  * @param {Function} success callback
@@ -71,6 +76,31 @@ Twitter.prototype.composeTweet = function(success, failure, tweetText, options){
 Twitter.prototype.getPublicTimeline = function(success, failure){
     cordova.exec(success, failure, "TwitterPlugin", "getPublicTimeline", []);
 };
+
+
+/**
+ * Search Tweets from Twitter Hashtag
+ * @param {Function} success callback
+ * @param {Object[]} success.response Tweet objects, see [Twitter Timeline Doc]
+ * @param {Function} failure callback
+ * @param {String} failure.error reason for failure
+ * @param {String} text Hashtag to search in twitter
+ * @example
+ *     window.plugins.twitter.searchByHashtag(
+ *         function (response) { console.log("timeline success: " + JSON.stringify(response)); }, 
+ *         function (error) { console.log("timeline failure: " + error); },
+ *         "twitterPlugin"
+ *     );
+ * 
+ * [Twitter Timeline Doc]: https://dev.twitter.com/rest/reference/get/search/tweets
+ */
+Twitter.prototype.searchByHashtag = function(success, failure, text){
+    options = options || {};
+    options.hashtag = text;
+    cordova.exec(success, failure, "TwitterPlugin", "searchByHashtag", [options]);
+};
+
+
 /**
  * Gets Tweets from Twitter Mentions
  * @param {Function} success callback
@@ -141,5 +171,17 @@ Twitter.prototype.getTWRequest = function(url, params, success, failure, options
     cordova.exec(success, failure, "TwitterPlugin", "getTWRequest", [options]);
 };
 
-module.exports = new Twitter();
 
+Twitter.prototype.reTweet = function(success, failure, id) {
+    cordova.exec(success, failure, "TwitterPlugin", "reTweet", [id]);
+};
+
+Twitter.prototype.addFavorites = function(success, failure, id) {
+    cordova.exec(success, failure, "TwitterPlugin", "addFavorites", [id]);
+};
+
+Twitter.prototype.rmFavorites = function(success, failure, id) {
+    cordova.exec(success, failure, "TwitterPlugin", "rmFavorites", [id]);
+};
+
+module.exports = new Twitter();
