@@ -6,6 +6,19 @@ So I made one myself with bits and peices that I found best.
 Feel free to pull request.
 
 Tested in phonegap 4.x
+----------------------
+
+Installation with cordova CLI
+
+    cordova plugin add cordova-plugin-twitter
+  
+Installation with phonegap CLI
+
+    phonegap plugin add cordova-plugin-twitter
+
+
+For version 3.x and before
+--------------------------
 
 Installation with cordova CLI
 
