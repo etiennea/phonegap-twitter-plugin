@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.phonegap.plugins.twitter"
-    version="0.5.0">
+    id="cordova-plugin-twitter"
+    version="0.6.0">
 
     <name>Twitter Connect</name>
     <description>This is Etienne Adriaenssen's verison the plugin for Twitter in Apache Cordova/PhoneGap!</description>
