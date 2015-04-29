@@ -12,21 +12,20 @@
         <clobbers target="Twitter" />
     </js-module>
 
-    <!-- ios -->
     <platform name="ios">
 
 
-    <config-file target="config.xml" parent="/widget/plugins">
-        <feature name="TwitterPlugin">
-            <param name="ios-package" value="TwitterPlugin" />
-        </feature>
-    </config-file>
+        <config-file target="config.xml" parent="/widget/plugins">
+            <feature name="TwitterPlugin">
+                <param name="ios-package" value="TwitterPlugin" />
+            </feature>
+        </config-file>
 
-    <header-file src="src/ios/TwitterPlugin.h" />
-    <source-file src="src/ios/TwitterPlugin.m" />
+        <header-file src="src/ios/TwitterPlugin.h" />
+        <source-file src="src/ios/TwitterPlugin.m" />
 
-    <framework src="Twitter.framework" />
-    <framework src="Accounts.framework" weak="true" />
+        <framework src="Twitter.framework" />
+        <framework src="Accounts.framework" weak="true" />
 
-</platform>
+    </platform>
 </plugin>
