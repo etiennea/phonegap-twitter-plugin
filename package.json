@@ -3,7 +3,8 @@
 	"version": "0.6.0",
 	"cordova": {
 		"id": "cordova-plugin-twitter",
-		"platforms": [
+		"platforms": 
+		[
 		"ios"
 		]
 		},
@@ -18,8 +19,9 @@
 			"cordova",
 			"device",
 			"cordovaplugin",
-			"cordova-ios",
+			"cordova-ios"
 			],
-			"engines": [],
-			"author": "@etiennead"
+			"author": "etiennead",
+			"contributors": [],
+			"homepage": "https://github.com/etiennea/phonegap-twitter-plugin"
 		}
